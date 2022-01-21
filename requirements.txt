@@ -1,0 +1,13 @@
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==1.10.1+cpu 
+torchvision==0.10.1+cpu 
+streamlit
+numpy
+pandas
+tifffile
+folium==0.2.1
+imgaug==0.2.5
+cellpose 
+wget
+memory_profiler
+fpdf
