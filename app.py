@@ -53,14 +53,14 @@ if __name__ == "__main__":
         img = Image.open(uploaded_img)
         st.image(img)
 
-    model_params = {
-        "diameter": 19.0,
-        "channels": [0, 0],
-        "augment": True,
-        "resample": True,
-    }
-    preds, flows = inference(
-        image=img,
-        model_path="cellpose_residual_on_style_on_concatenation_off_fold1_ep_649_cv_0.2834",
-        **model_params
-    )
+        model_params = {
+            "diameter": 19.0,
+            "channels": [0, 0],
+            "augment": True,
+            "resample": True,
+        }
+        preds, flows = inference(
+            image=img,
+            model_path="cellpose_residual_on_style_on_concatenation_off_fold1_ep_649_cv_0.2834",
+            **model_params
+        )
