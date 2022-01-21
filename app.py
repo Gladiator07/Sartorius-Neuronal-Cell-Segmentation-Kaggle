@@ -40,7 +40,6 @@ def inference(image, model_path, **model_params):
     preds, flows, _ = model_inference.eval(img, **model_params)
 
     print(preds.shape)
-    print(flows.shape)
     return preds, flows
 
 
