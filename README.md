@@ -1,3 +1,13 @@
+---
+title: Sartorius Cell Segmentation
+emoji: 🧠
+colorFrom: red
+colorTo: red
+sdk: streamlit
+app_file: app.py
+pinned: false
+---
+
 # Sartorius-cell-segmentation-kaggle
 
 # Quick Links
