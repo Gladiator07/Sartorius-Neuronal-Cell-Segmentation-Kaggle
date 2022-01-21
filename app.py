@@ -105,7 +105,7 @@ def calculate_cv_score(oof_df):
 def inference(image, model_path, **model_params):
     img = image
 
-    model_inference = models.CellposeModel(gpu=True, pretrained_model=model_path)
+    model_inference = models.CellposeModel(gpu=False, pretrained_model=model_path)
     preds, flows, _ = model_inference.eval(img, **model_params)
 
     print(preds.shape)
