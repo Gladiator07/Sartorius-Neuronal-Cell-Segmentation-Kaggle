@@ -1,57 +1,37 @@
-import os
-from PIL import Image
 import streamlit as st
-import ast
 import numpy as np
-import pandas as pd
-from cellpose import models, io, plot
-from pathlib import Path
+import matplotlib.pyplot as plt
+from PIL import Image
+from cellpose import models
 
 
-def rle_decode(mask_rle, shape=(520, 704)):
-    """
-    mask_rle: run-length as string formated (start length)
-    shape: (height,width) of array to return
-    Returns numpy array, 1 - mask, 0 - background
-
-    """
-    s = mask_rle.split()
-    starts, lengths = [np.asarray(x, dtype=int) for x in (s[0:][::2], s[1:][::2])]
-    starts -= 1
-    ends = starts + lengths
-    img = np.zeros(shape[0] * shape[1], dtype=np.uint8)
-    for lo, hi in zip(starts, ends):
-        img[lo:hi] = 1
-    return img.reshape(shape)
-
-
-def rle_encode(img):
-    pixels = img.flatten()
-    pixels = np.concatenate([[0], pixels, [0]])
-    runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
-    runs[1::2] -= runs[::2]
-    return " ".join(str(x) for x in runs)
-
-
-def inference(image, model_path, **model_params):
-    img = image
-
-    model_inference = models.CellposeModel(gpu=False, pretrained_model=model_path)
-    preds, flows, _ = model_inference.eval(img, **model_params)
-
-    print(preds.shape)
-    return preds, flows
+@st.cache()
+def load_model(model_path):
+    inf_model = models.CellposeModel(gpu=False, pretrained_model=model_path)
+    return inf_model
 
 
 if __name__ == "__main__":
 
-    st.title("Sartorius Cell Segmentation")
+    st.title("Sartorius Neuronal Cell Segmentation")
+
+    inf_model = load_model(
+        model_path="./cellpose_residual_on_style_on_concatenation_off_fold1_ep_649_cv_0.2834"
+    )
 
     uploaded_img = st.file_uploader(label="Upload neuronal cell image")
-    if uploaded_img is not None:
+
+    with st.expander("View input image"):
+        if uploaded_img is not None:
+            st.image(uploaded_img)
+        else:
+            st.warning("Please upload an image")
+
+    segment = st.button("Perform segmentation")
+
+    if uploaded_img is not None and segment:
         img = Image.open(uploaded_img)
         img = np.array(img)
-        st.image(img)
 
         model_params = {
             "diameter": 19.0,
@@ -59,10 +39,17 @@ if __name__ == "__main__":
             "augment": True,
             "resample": True,
         }
-        preds, flows = inference(
-            image=img,
-            model_path="cellpose_residual_on_style_on_concatenation_off_fold1_ep_649_cv_0.2834",
-            **model_params
-        )
+        with st.spinner("Performing segmentation. This might take a while..."):
+            preds, flows, _ = inf_model.eval([img], **model_params)
 
-        print(preds)
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+        ax1.axis("off")
+        ax2.axis("off")
+        ax3.axis("off")
+        ax1.set_title("Original Image")
+        ax1.imshow(img)
+        ax2.set_title("Segmented image")
+        ax2.imshow(preds[0])
+        ax3.set_title("Image flows")
+        ax3.imshow(flows[0][0])
+        st.pyplot(fig)
