@@ -11,3 +11,4 @@ cellpose
 wget
 memory_profiler
 fpdf
+Pillow
