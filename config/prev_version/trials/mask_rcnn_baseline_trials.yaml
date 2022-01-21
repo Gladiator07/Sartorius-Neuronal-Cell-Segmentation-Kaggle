@@ -1,0 +1,28 @@
+DATALOADER:
+  NUM_WORKERS: 2
+DATASETS:
+  TEST: !!python/tuple
+  - sartorius_val
+  TRAIN: !!python/tuple
+  - sartorius_train
+INPUT:
+  MASK_FORMAT: bitmask
+MODEL:
+  ROI_HEADS:
+    BATCH_SIZE_PER_IMAGE: 128
+    NUM_CLASSES: 3
+    SCORE_THRESH_TEST: 0.5
+  WEIGHTS: https://dl.fbaipublicfiles.com/detectron2/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl
+SEED: 42
+SOLVER:
+  AMP:
+    ENABLED: false
+  BASE_LR: 0.001
+  IMS_PER_BATCH: 2
+  LR_SCHEDULER_NAME: WarmupMultiStepLR
+  WARMUP_ITERS: 100
+  MAX_ITER: 500
+  # EPOCHS: MAX_ITER * IMS_PER_BATCH / TOTAL_IMAGES [484]
+TEST:
+  EVAL_PERIOD: 242
+VERSION: 2

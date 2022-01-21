@@ -1,0 +1,42 @@
+DATASETS:
+  TEST: !!python/tuple
+  - sartorius_val
+  TRAIN: !!python/tuple
+  - sartorius_train
+INPUT:
+  MASK_FORMAT: bitmask
+  MAX_SIZE_TEST: 1333
+  MAX_SIZE_TRAIN: 1333
+  MIN_SIZE_TEST: 800
+  MIN_SIZE_TRAIN:
+  - 480
+  - 520
+  - 560
+  - 640
+  - 672
+  - 704
+  - 736
+  - 768
+  - 800
+
+MODEL:
+  WEIGHTS: https://dl.fbaipublicfiles.com/detectron2/COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x/138205316/model_final_a3ec72.pkl
+  ROI_HEADS:
+    BATCH_SIZE_PER_IMAGE: 64
+    NUM_CLASSES: 3
+    SCORE_THRESH_TEST: 0.5
+SEED: 42
+SOLVER:
+  AMP:
+    ENABLED: true
+  GAMMA: 0.1
+  BASE_LR: 0.0025
+  IMS_PER_BATCH: 2
+  WARMUP_ITERS: 1000
+  WARMUP_METHOD: linear
+  LR_SCHEDULER_NAME: WarmupMultiStepLR
+  MAX_ITER: 10000
+  STEPS: (8000,)
+TEST:
+  EVAL_PERIOD: 242
+VERSION: 2
