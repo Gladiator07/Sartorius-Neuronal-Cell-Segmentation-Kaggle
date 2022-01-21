@@ -51,6 +51,7 @@ if __name__ == "__main__":
     uploaded_img = st.file_uploader(label="Upload neuronal cell image")
     if uploaded_img is not None:
         img = Image.open(uploaded_img)
+        img = np.array(img)
         st.image(img)
 
         model_params = {
