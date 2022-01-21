@@ -64,3 +64,5 @@ if __name__ == "__main__":
             model_path="cellpose_residual_on_style_on_concatenation_off_fold1_ep_649_cv_0.2834",
             **model_params
         )
+
+        print(preds)
