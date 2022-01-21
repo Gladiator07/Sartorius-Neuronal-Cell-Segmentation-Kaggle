@@ -43,19 +43,17 @@ def inference(image, model_path, **model_params):
     return preds, flows
 
 
-if __name__ == "__main__":
+st.title("Sartorius Cell Segmentation")
 
-    st.title("Sartorius Cell Segmentation")
-
-    img = st.file_uploader(label="Upload neuronal cell image")
-    model_params = {
-        "diameter": 19.0,
-        "channels": [0, 0],
-        "augment": True,
-        "resample": True,
-    }
-    preds, flows = inference(
-        image=img,
-        model_path="cellpose_residual_on_style_on_concatenation_off_fold1_ep_649_cv_0.2834",
-        **model_params
-    )
+img = st.file_uploader(label="Upload neuronal cell image")
+model_params = {
+    "diameter": 19.0,
+    "channels": [0, 0],
+    "augment": True,
+    "resample": True,
+}
+preds, flows = inference(
+    image=img,
+    model_path="cellpose_residual_on_style_on_concatenation_off_fold1_ep_649_cv_0.2834",
+    **model_params
+)
